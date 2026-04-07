@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Kingston Spring Music Festival",
+    "date": "2026-05-14T18:30:00.000Z",
+    "location": "Confederation Park, Kingston",
+    "category": "Music",
+    "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
+    "description": "An outdoor evening of local bands, food vendors, and community performances to launch the spring festival season.",
+    "availableSlots": 120
+  },
+  {
+    "title": "Downtown Coding Workshop",
+    "date": "2026-05-20T14:00:00.000Z",
+    "location": "Innovation Hub, Kingston",
+    "category": "Workshop",
+    "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+    "description": "A beginner-friendly coding workshop focused on web development basics, debugging, and collaborative practice.",
+    "availableSlots": 30
+  },
+  {
+    "title": "Waterfront Food Market",
+    "date": "2026-06-02T16:00:00.000Z",
+    "location": "Kingston Waterfront Market Square",
+    "category": "Food",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+    "description": "A public food market featuring local restaurants, dessert booths, and live entertainment along the waterfront.",
+    "availableSlots": 200
+  },
+  {
+    "title": "Career Networking Night",
+    "date": "2026-06-11T17:30:00.000Z",
+    "location": "St. Lawrence College Event Hall",
+    "category": "Networking",
+    "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+    "description": "Students and employers meet for short networking conversations, industry talks, and resume feedback.",
+    "availableSlots": 80
+  },
+  {
+    "title": "Community Art Showcase",
+    "date": "2026-06-18T19:00:00.000Z",
+    "location": "Grand Theatre Gallery, Kingston",
+    "category": "Art",
+    "image": "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80",
+    "description": "A public showcase of student and local artist work, including painting, photography, and mixed media exhibits.",
+    "availableSlots": 60
+  },
+  {
+    "title": "Summer Startup Panel",
+    "date": "2026-07-08T18:00:00.000Z",
+    "location": "Launch Lab Auditorium",
+    "category": "Business",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
+    "description": "Founders and startup mentors share lessons on product design, funding, and building a small business team.",
+    "availableSlots": 45
+  },
+  {
+    "title": "Family Movie In The Park",
+    "date": "2026-07-22T20:15:00.000Z",
+    "location": "City Park Lawn, Kingston",
+    "category": "Community",
+    "image": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80",
+    "description": "Bring blankets and lawn chairs for an outdoor movie night designed for families and community visitors.",
+    "availableSlots": 150
+  },
+  {
+    "title": "August Design Sprint Demo Day",
+    "date": "2026-08-13T15:00:00.000Z",
+    "location": "Maker Space Studio",
+    "category": "Technology",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    "description": "Teams present design sprint prototypes, explain their decisions, and gather feedback from invited guests.",
+    "availableSlots": 40
+  }
+]

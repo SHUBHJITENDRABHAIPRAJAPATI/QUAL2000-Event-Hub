@@ -1,50 +1,385 @@
-# Event Hub
+# Event Hub QA Case Study
 
-## Project Overview
+## Overview
 
-Event Hub is a simple CRUD web application built for a web programming course project. It keeps the same teaching-friendly structure as the current MoviePlex app, but changes the context to events and registrations.
+Event Hub is a server-rendered Node.js CRUD application that is being used as a
+case study for two QUAL2000 Quality Assurance and Testing assignments. Students
+will use this project as the system under test for:
 
-The application has two sides inside the same Express app:
+- Assignment 1: planning end-to-end test coverage and documenting that plan in
+  [Test-Cases-Submission.xlsx](./Test-Cases-Submission.xlsx) while following
+  the requirements in [Test Plan Assignment.docx](./Test%20Plan%20Assignment.docx)
+- Assignment 2: executing those planned scenarios with Playwright and completing
+  the reporting expectations described in
+  [QA Report-Assignment.docx](./QA%20Report-Assignment.docx)
 
-- A public client side where users can browse events and manage registrations
-- A secured admin dashboard where an administrator can add, update, and delete event data
+This README is written as the main student handout for using the app as a QA
+case study. It explains how to run the app, configure the environment, load the
+starter data, understand the app features, and map the project to both testing
+assignments.
 
-This project must remain simple, server-rendered, and beginner-friendly.
+## Run The App
 
-## Core Requirements
+Use these steps first so the app is running before you begin planning or testing.
 
-- Use `npm` as the package manager
-- Use `server.js` as the main entry file
-- Use CommonJS syntax with `require(...)`
-- Use `express`, `mongoose`, `ejs`, and `dotenv` as the main dependencies
-- Use MongoDB Atlas as the database
-- Store all secrets in `.env`
-- Commit a `.env.example` file with placeholder values only
-- Use Git and GitHub for version control
-- Use port `3000`
-- Keep the project server-rendered with EJS
+1. Install the npm packages:
 
-Optional but recommended:
+```bash
+npm install
+```
 
-- `method-override` for edit and delete form actions
-- Bootstrap for simple styling
+2. Start the application with either of these commands:
 
-## Application Goal
+```bash
+npm start
+```
 
-The Event Hub app should allow users to:
+or
 
-- View all available events
-- View the details of a single event
-- Create a registration for an event
-- View registrations belonging to the single client user
-- Delete a registration
+```bash
+node server.js
+```
 
-The admin dashboard should allow an authenticated admin to:
+3. Open a browser to:
 
-- View all events
-- Add a new event
-- Edit an existing event
-- Delete an event
+```text
+http://localhost:3000
+```
+
+If the app loads successfully, you are ready to explore the site manually and
+begin Assignment 1 or Assignment 2 work.
+
+## Project Purpose In This Course
+
+This repository is not just a sample CRUD app. It is the application students
+will analyze, plan, and test from an end-user perspective. The goal is to help
+students practice:
+
+- identifying complete user workflows
+- planning thorough end-to-end test coverage
+- documenting expected behavior and test data
+- executing automated E2E tests with Playwright
+- recording pass/fail outcomes and bug information clearly
+
+The emphasis is on testing the app as a realistic web application, not on
+changing the application architecture.
+
+## What Students Are Expected To Test
+
+Students should treat the full Event Hub application as in scope for testing.
+That includes both the public user experience and the admin dashboard.
+
+### Public user workflows
+
+- Home page access
+- User registration
+- User login and logout
+- Viewing all available events
+- Viewing a single event page
+- Registering for an event
+- Viewing the "My Events" page
+- Editing seat counts for an existing registration
+- Removing an event from a personal calendar
+- Viewing the monthly calendar and agenda-style calendar page
+- Handling negative scenarios such as invalid login, invalid seat count, or
+  unavailable seats
+
+### Admin workflows
+
+- Admin login
+- Viewing the admin events list
+- Creating a new event
+- Editing an existing event
+- Deleting an event
+- Verifying public-side changes after admin actions where relevant
+
+### Environment and system-level checks
+
+- Confirming the application runs locally on `http://localhost:3000`
+- Confirming MongoDB Atlas connectivity works through the `.env` settings
+- Confirming starter event data displays correctly after import
+- Confirming public and admin flows work together across the same database
+
+## Current Feature Summary
+
+The current version of Event Hub includes:
+
+- Public account creation and login
+- Public event browsing and event detail pages
+- Event registration for logged-in users
+- Personal registration management
+- Seat updates with a maximum of 10 seats per user per event
+- Registration removal from a personal calendar
+- Calendar views for saved events
+- Admin login and event CRUD management
+- Server-rendered EJS pages with MongoDB Atlas as the database
+
+These features should guide the test plan students create in Assignment 1 and
+the Playwright coverage they implement in Assignment 2.
+
+## Prerequisites
+
+Before working with the project, students should have:
+
+- Node.js installed
+- npm installed
+- a MongoDB Atlas account
+- access to MongoDB Compass or Atlas tools for importing JSON data
+- a local clone or download of this repository
+- a browser such as Chrome, Edge, or Firefox
+
+For Assignment 2, students will also need Playwright installed in their own QA
+workspace or project setup. This repository does not provide instructor-authored
+Playwright tests.
+
+## Environment Setup
+
+The application requires a local `.env` file that matches the structure of
+[.env.example](./.env.example).
+
+### Step 1: Create a local environment file
+
+Create a `.env` file in the project root and copy the same variable names from
+`.env.example`.
+
+Required variables:
+
+```env
+DB_URI=your_mongodb_atlas_connection_string
+PORT=3000
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change_this_password
+SESSION_SECRET=change_this_session_secret
+```
+
+### Step 2: Use your own MongoDB Atlas connection string
+
+Students must use their own MongoDB Atlas connection string for `DB_URI`.
+
+- Do not use another student's database
+- Do not commit your `.env` file
+- Do not share database credentials in screenshots, reports, or submissions
+
+### Step 3: Keep `.env` local only
+
+The `.env` file is for local development only and should remain uncommitted.
+This repository already includes `.env.example` so students can see the required
+variables without exposing secrets.
+
+## Starter Event Data
+
+A starter JSON file is provided to give students a consistent set of events to
+test against:
+
+- [data/starter-events.json](./data/starter-events.json)
+
+The seed file follows the current `Event` schema exactly. Each record contains:
+
+- `title`
+- `date`
+- `location`
+- `category`
+- `image`
+- `description`
+- `availableSlots`
+
+No registration, user, admin, or extra metadata fields are included.
+
+## Importing The Starter Data Into MongoDB Atlas
+
+Students should load the starter events into their own MongoDB Atlas database
+before testing.
+
+### Recommended workflow with MongoDB Compass
+
+1. Create your MongoDB Atlas cluster and obtain your connection string
+2. Put that connection string in your local `.env` file as `DB_URI`
+3. Open MongoDB Compass and connect to your Atlas cluster
+4. Open the database used by your `DB_URI`
+5. Create or open the `events` collection
+6. Import [data/starter-events.json](./data/starter-events.json) into the
+   `events` collection
+7. Start the app and confirm the event data appears on the public site
+
+### Important notes
+
+- Import the JSON into the `events` collection
+- Do not rename the fields in the JSON file
+- Do not add extra fields before import
+- If the events page is empty after import, verify the database name in your
+  connection string and confirm the import was done in the correct collection
+
+## Local Usage Flow Before Testing
+
+Once your `.env` file and starter data are ready, the typical setup flow is:
+
+1. Run `npm install`
+2. Run `npm start` or `node server.js`
+3. Open `http://localhost:3000`
+4. Confirm the home page loads
+5. Confirm the event directory shows the imported starter events
+6. Create at least one public user account for testing
+7. Use the admin credentials from your local `.env` file to verify the admin
+   side is accessible
+
+This creates a stable baseline before you begin planning or automating tests.
+
+## Assignment 1: Test Plan
+
+Assignment 1 asks students to prepare a complete end-to-end test plan for the
+Event Hub website.
+
+### Required files for Assignment 1
+
+- [Test Plan Assignment.docx](./Test%20Plan%20Assignment.docx)
+- [Test-Cases-Submission.xlsx](./Test-Cases-Submission.xlsx)
+
+### What students should do
+
+- Read the instructions in `Test Plan Assignment.docx`
+- Explore the full Event Hub workflow manually
+- Identify all major user stories, edge cases, and integration points
+- Plan E2E scenarios for the full app, not only one page or one role
+- Record the planned scenarios in `Test-Cases-Submission.xlsx`
+
+### Spreadsheet columns in the provided template
+
+The Excel file already includes columns for:
+
+- `Test ID`
+- `Test Steps`
+- `Input Data`
+- `Expected Result`
+- `Actual Results`
+- `Test Environment`
+- `Execution Status (Pass/Fail)`
+- `Bug Severity (Low/Medium/High)`
+- `Bug Priority (Low/Medium/High)`
+- `Notes`
+
+### How to use the spreadsheet for Assignment 1
+
+During the planning phase, students should:
+
+- create a unique test ID for each planned case
+- write clear step-by-step actions in `Test Steps`
+- document needed credentials, field values, and setup details in `Input Data`
+- define the expected system behavior in `Expected Result`
+- note the target environment, such as local Event Hub with MongoDB Atlas, in
+  `Test Environment`
+
+Execution-oriented columns can stay blank or `N/A` until Assignment 2 if your
+instructor allows that workflow.
+
+### Coverage expectations for Assignment 1
+
+A strong test plan should include:
+
+- positive scenarios
+- negative scenarios
+- boundary conditions
+- public user workflows
+- admin workflows
+- cross-page or multi-step workflows
+- data-dependent behavior
+- validation and error handling
+
+Suggested coverage areas:
+
+- app startup and environment validation
+- home page and navigation
+- user registration
+- user login and logout
+- event browsing
+- single-event detail view
+- registration creation
+- seat update rules
+- calendar views
+- registration deletion
+- admin login
+- admin event create, edit, and delete
+- invalid IDs, invalid form input, and full-capacity scenarios
+
+## Assignment 2: QA Report And Playwright Execution
+
+Assignment 2 uses the test plan from Assignment 1 as the basis for automated
+execution with Playwright.
+
+### Required file for Assignment 2
+
+- [QA Report-Assignment.docx](./QA%20Report-Assignment.docx)
+
+### What students should do
+
+- review the completed test plan from Assignment 1
+- translate planned scenarios into executable Playwright test scripts
+- run those tests against the local Event Hub application
+- update the spreadsheet with real execution results
+- record failures, bug severity, bug priority, and notes where needed
+- submit both the updated spreadsheet and the Playwright test source code
+
+### Important reminder
+
+This repository is the application under test. It is not a packaged Playwright
+starter template. Students are responsible for creating their own Playwright
+test implementation for Assignment 2.
+
+### Recommended Playwright coverage
+
+Students should automate the most important end-to-end flows, including:
+
+- public user registration
+- public login and logout
+- browsing events
+- opening event details
+- creating a registration
+- editing seat counts
+- deleting a registration
+- viewing calendar pages
+- admin login
+- creating an admin event
+- editing an admin event
+- deleting an admin event
+- negative validation flows where practical
+
+### Execution expectations
+
+When students run Assignment 2, they should:
+
+- execute against their local running app
+- ensure the database contains the starter events
+- use their own public test accounts
+- use their local admin credentials from `.env`
+- update the spreadsheet with actual results and pass/fail status
+
+## Submission Guidance
+
+### Assignment 1 submission
+
+Students should submit the completed planning version of:
+
+- `Test-Cases-Submission.xlsx`
+
+### Assignment 2 submission
+
+Students should submit:
+
+- the updated `Test-Cases-Submission.xlsx` with execution results
+- their Playwright source code
+- any required reporting details requested by the course instructor
+
+## Common Pitfalls
+
+Students should watch for these common issues when preparing or executing tests:
+
+- forgetting to create `.env`
+- forgetting to use a personal MongoDB Atlas `DB_URI`
+- importing starter data into the wrong database or collection
+- starting the app before the database is ready
+- writing tests for only the public side and ignoring admin flows
+- documenting only happy paths and skipping validation or error cases
+- leaving execution fields blank during Assignment 2
+- sharing `.env` secrets or Atlas credentials
 
 ## Tech Stack
 
@@ -53,292 +388,36 @@ The admin dashboard should allow an authenticated admin to:
 - Mongoose
 - EJS
 - dotenv
+- express-session
+- method-override
 - MongoDB Atlas
 - npm
 
-## Required Project Structure
+## Project Structure
 
 ```text
 .
 |-- .env
 |-- .env.example
-|-- .gitignore
+|-- AGENTS.md
+|-- QA Report-Assignment.docx
 |-- README.md
-|-- package.json
-|-- package-lock.json
-|-- server.js
+|-- Test Plan Assignment.docx
+|-- Test-Cases-Submission.xlsx
+|-- data/
+|   `-- starter-events.json
 |-- models/
 |-- public/
+|-- server.js
+|-- tests/
 `-- views/
     `-- partials/
 ```
 
-Rules:
-
-- Keep all route handlers in `server.js`
-- Keep Mongoose schemas and models in `models/`
-- Keep static files in `public/`
-- Keep page templates in `views/`
-- Keep reusable EJS parts in `views/partials/`
-- Do not introduce a separate controller or service layer for this version
-
-## Environment Variables
-
-Use the following environment variables:
-
-```env
-DB_URI=your_mongodb_atlas_connection_string
-PORT=3000
-ADMIN_USERNAME=your_admin_username
-ADMIN_PASSWORD=your_admin_password
-SESSION_SECRET=your_session_secret
-```
-
-Notes:
-
-- `.env` must never be committed
-- `.env.example` must contain placeholder values
-- `PORT` should default to `3000`
-- `DB_URI` must point to MongoDB Atlas
-
-## server.js Rules
-
-`server.js` must follow this order:
-
-1. Import dependencies and models
-2. Load environment variables with `require("dotenv").config();`
-3. Create the Express app with `const server = express();`
-4. Define `port` and `dbURI`
-5. Configure view engine and middleware
-6. Connect to MongoDB
-7. Define public routes
-8. Define secured admin routes
-9. Define the catch-all 404 route
-
-Expected setup pattern:
-
-```js
-const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
-
-const server = express();
-const port = process.env.PORT || 3000;
-const dbURI = process.env.DB_URI;
-
-server.set("view engine", "ejs");
-server.use(express.static("public"));
-server.use(express.urlencoded({ extended: false }));
-server.use(express.json());
-
-mongoose
-  .connect(dbURI)
-  .then(() =>
-    server.listen(port, () => {
-      console.log(`Listening on port ${port}`);
-    })
-  )
-  .catch((error) => console.log(error));
-
-// public routes
-// admin routes
-// 404 route
-```
-
-Important rule:
-
-- `mongoose.connect(...)` must come directly after the middleware setup and before the route definitions
-
-## Route Style Rules
-
-- Keep route handlers directly in `server.js`
-- Use `request` and `response` as route callback parameter names
-- Keep comments simple and descriptive
-- Keep the CRUD routes easy for students to read
-- Use redirects after create, update, and delete operations when appropriate
-
-Example:
-
-```js
-server.get("/events", async (request, response) => {
-  const events = await Event.find();
-  response.render("eventsIndexPage", { events });
-});
-```
-
-## Data Models
-
-### Event
-
-The main content model is `Event`.
-
-Recommended fields:
-
-- `title` as `String`
-- `date` as `String` or `Date`
-- `location` as `String`
-- `category` as `String`
-- `image` as `String`
-- `description` as `String`
-- `availableSlots` as `Number`
-
-### Registration
-
-The secondary model is `Registration`.
-
-Recommended fields:
-
-- `eventId` as `ObjectId` referencing `Event`
-- `eventTitle` as `String`
-- `attendeeName` as `String`
-- `attendeeEmail` as `String`
-- `ticketCount` as `Number`
-- `status` as `String`
-
-Suggested status values:
-
-- `Confirmed`
-- `Cancelled`
-
-## Public Client-Side Features
-
-The client side is for one logical user only. This project should not become a full multi-user platform.
-
-Public users should be able to:
-
-- View all events
-- View one event
-- Create a registration
-- View their registration list
-- Delete a registration
-
-Recommended public routes:
-
-- `GET /events`
-- `GET /events/:id`
-- `GET /events/registrations/:id`
-- `POST /events/registrations`
-- `GET /events/registrations`
-- `DELETE /events/registrations/:id`
-
-For course simplicity:
-
-- Do not build a full social network or follower system
-- Do not add likes, messaging, feeds, or multi-user ownership logic
-- Keep the client side focused on event discovery and registration CRUD
-
-## Secured Admin Dashboard
-
-The admin area must be secured and separated from the public side.
-
-Recommended admin routes:
-
-- `GET /admin/login`
-- `POST /admin/login`
-- `POST /admin/logout`
-- `GET /admin/events`
-- `GET /admin/events/new`
-- `POST /admin/events`
-- `GET /admin/events/:id/edit`
-- `PATCH /admin/events/:id`
-- `DELETE /admin/events/:id`
-
-Recommended security approach:
-
-- Use simple session-based authentication
-- Store admin credentials and session secret in `.env`
-- Protect all `/admin` routes except the login page
-- Redirect unauthenticated users away from the admin dashboard
-
-Keep the security approach course-appropriate and easy to explain.
-
-## Views And Naming Rules
-
-All page views must end with `Page.ejs`.
-
-Examples:
-
-- `eventsIndexPage.ejs`
-- `eventShowPage.ejs`
-- `registrationsIndexPage.ejs`
-- `registrationNewPage.ejs`
-- `adminLoginPage.ejs`
-- `adminEventsIndexPage.ejs`
-- `adminEventsNewPage.ejs`
-- `adminEventsEditPage.ejs`
-- `notFoundPage.ejs`
-
-Reusable shared markup should stay in `views/partials/`.
-
-## Suggested Pages
-
-Public side:
-
-- Home page
-- Events index page
-- Single event page
-- Registration form page
-- Registrations list page
-
-Admin side:
-
-- Admin login page
-- Admin events index page
-- Admin new event page
-- Admin edit event page
-
-Shared:
-
-- Navigation partial
-- 404 page
-
-## Coding Conventions
-
-- Use semicolons
-- Use clear variable names based on the domain
-- Keep one model per file
-- Use `const Schema = mongoose.Schema;`
-- Export models with `module.exports = ModelName;`
-- Prefer simple `async` and `await`
-- Keep the code readable for web programming students
-
-Do not introduce:
-
-- TypeScript
-- React, Vue, Angular, or another SPA framework
-- An API-only backend
-- A different package manager
-- A different main file name
-- `req` and `res` as handler parameter names
-
-## Example package.json Expectations
-
-The project should include:
-
-- `"main": "server.js"`
-- a start script such as `"start": "node server.js"`
-- the required dependencies
-
-## Minimum Completion Checklist
-
-Before the project is considered complete, confirm that it includes:
-
-- `server.js` as the entrypoint
-- `npm` as the package manager
-- `.env` and `.env.example`
-- `express`, `mongoose`, `ejs`, and `dotenv`
-- MongoDB Atlas connection through `DB_URI`
-- `PORT=3000`
-- middleware setup before the database connection
-- database connection before routes
-- `request` and `response` in route handlers
-- page files named with the `Page.ejs` suffix
-- public event browsing
-- public registration CRUD for one client user
-- secured admin CRUD for events
-- Git and GitHub usage
-- a catch-all 404 page
-
 ## Final Notes
 
-This project should feel like a direct context swap of the original CRUD app rather than a completely different architecture. The topic changes from movies to events, but the structure, teaching style, and beginner-friendly implementation remain the same.
+Event Hub should be treated as a full QA case study for both assignments. The
+application already contains enough public and admin functionality to support a
+meaningful E2E test plan and a substantial Playwright execution phase. Students
+should focus on quality, coverage, clarity, and realistic user behavior rather
+than only producing a small number of test cases.
