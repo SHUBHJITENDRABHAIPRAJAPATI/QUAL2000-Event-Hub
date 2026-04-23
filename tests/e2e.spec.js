@@ -1,8 +1,8 @@
-// Test file for E2E testing of Event Hub application
-// Author: Shubh Prajapati
-// Date: April 2026
+//testing file for event hub application
+//Shubh Prajapati
 
-// This file covers both black-box and white-box testing scenarios
+
+//file has both black-box and white-box testing scenarios
 // including validation, authentication, and event registration flows
 
 const { test, expect } = require('@playwright/test');
@@ -32,10 +32,12 @@ test('should show error when registration fields are missing', async ({ page }) 
 
 
 // user login tests
+
 //login test with valid credentials and invalid credentials
 
 test('should login successfully with valid credentials', async ({ page }) => {
   await page.goto('http://localhost:3000/login');
+
 
   await page.fill('input[name="email"]', 'shubh123@test.com');
   await page.fill('input[name="password"]', '123456');
@@ -57,9 +59,9 @@ test('should show error for invalid login credentials', async ({ page }) => {
 });
 
 
+
+
 // event listing test
-
-
 test('should load events page', async ({ page }) => {
   await page.goto('http://localhost:3000/events');
 
@@ -73,9 +75,11 @@ test('should register for an event with valid seat count', async ({ page }) => {
   await page.goto('http://localhost:3000/events');
 
   await page.locator('a').first().click();
+
   await page.click('text=Register');
 
   await page.fill('input[name="ticketCount"]', '2');
+
   await page.click('button[type="submit"]');
 
   await expect(page).toHaveURL(/registrations/);
@@ -85,6 +89,7 @@ test('should reject registration with invalid seat count', async ({ page }) => {
   await page.goto('http://localhost:3000/events');
 
   await page.locator('a').first().click();
+
   await page.click('text=Register');
 
   await page.fill('input[name="ticketCount"]', '0');
@@ -95,7 +100,6 @@ test('should reject registration with invalid seat count', async ({ page }) => {
 
 
 // edit registration test using white-box testing approach
-
 test('should update registration seat count', async ({ page }) => {
   await page.goto('http://localhost:3000/events/registrations');
 
@@ -113,7 +117,6 @@ test('should update registration seat count', async ({ page }) => {
 
 
 // delete regstation(whtbox)
-
 test('should delete a registration', async ({ page }) => {
   await page.goto('http://localhost:3000/events/registrations');
 
@@ -128,7 +131,6 @@ test('should delete a registration', async ({ page }) => {
 
 
 // security test
-
 test('should redirect to login when accessing protected route without auth', async ({ page }) => {
   await page.goto('http://localhost:3000/events/registrations');
 
@@ -137,7 +139,6 @@ test('should redirect to login when accessing protected route without auth', asy
 
 
 // Admin login test using black-box testing approach
-
 test('should allow admin to login and access dashboard', async ({ page }) => {
   await page.goto('http://localhost:3000/admin/login');
 
